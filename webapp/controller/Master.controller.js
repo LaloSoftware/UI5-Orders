@@ -95,7 +95,7 @@ sap.ui.define([
 			var sQuery = oEvent.getParameter("query");
 
 			if (sQuery) {
-				this._oListFilterState.aSearch = [new Filter("OrderID", FilterOperator.Contains, sQuery)];
+				this._oListFilterState.aSearch = [new Filter("OrderID", FilterOperator.EQ, sQuery)];
 			} else {
 				this._oListFilterState.aSearch = [];
 			}
