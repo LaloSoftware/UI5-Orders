@@ -1,0 +1,111 @@
+<mvc:View
+	controllerName="localsap.orders.orders.controller.Detail"
+	xmlns="sap.m"
+	xmlns:semantic="sap.f.semantic"
+	xmlns:mvc="sap.ui.core.mvc"
+	
+	xmlns:layout="sap.ui.layout">
+
+	<semantic:SemanticPage
+		id="detailPage"
+		busy="{detailView>/busy}"
+		busyIndicatorDelay="{detailView>/delay}">
+		<semantic:titleHeading>
+			<Title
+				text="Order {OrderID}"
+				level="H2"/>
+		</semantic:titleHeading>
+		<semantic:headerContent>
+			<ObjectAttribute title="{i18n>description}"/>
+			<layout:HorizontalLayout allowWrapping="true">
+				<layout:VerticalLayout class="sapUiMediumMarginEnd">
+					<ObjectAttribute title="Order Date" text="{OrderDate}"/>
+					<ObjectAttribute title="Employee ID" text="{EmployeeID}"/>
+					<ObjectAttribute title="Customer ID" text="{CustomerID}"/>
+				</layout:VerticalLayout>
+				<layout:VerticalLayout>
+					<ObjectAttribute title="Shipped Date" text="{ShippedDate}"/>
+					<ObjectAttribute title="Ship Via" text="{ShipVia}"/>
+					<ObjectAttribute title="Ship Name" text="{ShipName}"/>
+					<ObjectAttribute title="Ship Address" text="{ShipAddress}"/>
+					<ObjectAttribute title="Ship Postal Code" text="ShipPostalCode"/>
+				</layout:VerticalLayout>
+			</layout:HorizontalLayout>
+		</semantic:headerContent>
+		<semantic:content>
+			<Table
+				id="lineItemsList"
+				width="auto"
+				items="{Order_Details}"
+				updateFinished=".onListUpdateFinished"
+				noDataText="{i18n>detailLineItemTableNoDataText}"
+				busyIndicatorDelay="{detailView>/lineItemTableDelay}">
+				<headerToolbar>
+					<Toolbar>
+						<Title
+							id="lineItemsTitle"
+							text="{detailView>/lineItemListTitle}"
+							titleStyle="H3"
+							level="H3"/>
+					</Toolbar>
+				</headerToolbar>
+				<columns>
+					<Column
+						minScreenWidth="Tablet"
+						demandPopin="true"
+						hAlign="Begin">
+						<Text text="{i18n>detailLineItemTableIDColumn}"/>
+					</Column>
+					<Column
+						minScreenWidth="Tablet"
+						demandPopin="true"
+						hAlign="Center">
+						<Text text="Unit Price"/>
+					</Column>
+					<Column
+						minScreenWidth="Tablet"
+						demandPopin="true"
+						hAlign="Center">
+						<Text text="Discount"/>
+					</Column>
+					<Column
+						minScreenWidth="Tablet"
+						demandPopin="true"
+						hAlign="End">
+						<Text text="{i18n>detailLineItemTableUnitNumberColumn}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<ObjectIdentifier
+								text="{ProductID}"/>
+							<ObjectIdentifier text="{path: 'UnitPrice', formatter: '.formatter.currencyValue'}"/>
+							<ObjectIdentifier text="{path: 'Discount', formatter: '.formatter.discountValue'}"/>
+							<ObjectIdentifier text="{Quantity}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</semantic:content>
+
+		<semantic:closeAction>
+			<semantic:CloseAction
+					id="closeColumn"
+					press=".onCloseDetailPress"/>
+		</semantic:closeAction>
+
+		<semantic:fullScreenAction>
+			<semantic:FullScreenAction
+					id="enterFullScreen"
+					visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}"
+					press=".toggleFullScreen"/>
+		</semantic:fullScreenAction>
+		<semantic:exitFullScreenAction>
+			<semantic:ExitFullScreenAction
+					id="exitFullScreen"
+					visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}"
+					press=".toggleFullScreen"/>
+		</semantic:exitFullScreenAction>
+		</semantic:SemanticPage>
+</mvc:View>
