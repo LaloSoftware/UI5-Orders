@@ -29,6 +29,8 @@ sap.ui.define([
 
 			this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
 
+			this.getRouter().getRoute("Info").attachPatternMatched(this._onObjectMatched, this)
+
 			this.setModel(oViewModel, "detailView");
 
 			this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
@@ -87,6 +89,13 @@ sap.ui.define([
 		 */
 		_onObjectMatched : function (oEvent) {
 			var sObjectId =  oEvent.getParameter("arguments").objectId;
+			if (!sObjectId) {
+				return;
+			}
+			if (oEvent.getParameter("name") === "object") {
+				this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
+			}
+				
 			this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
 			this.getModel().metadataLoaded().then( function() {
 				var sObjectPath = this.getModel().createKey("Orders", {
@@ -198,6 +207,37 @@ sap.ui.define([
 			} else {
 				// reset to previous layout
 				this.getModel("appView").setProperty("/layout",  this.getModel("appView").getProperty("/previousLayout"));
+			}
+		},
+		action: function (oEvent) {
+			var that = this;
+			var actionParameters = JSON.parse(oEvent.getSource().data("wiring").replace(/'/g, "\""));
+			var eventType = oEvent.getId();
+			var aTargets = actionParameters[eventType].targets || [];
+			aTargets.forEach(function (oTarget) {
+				var oControl = that.byId(oTarget.id);
+				if (oControl) {
+					var oParams = {};
+					for (var prop in oTarget.parameters) {
+						oParams[prop] = oEvent.getParameter(oTarget.parameters[prop]);
+					}
+					oControl[oTarget.action](oParams);
+				}
+			});
+			var oNavigation = actionParameters[eventType].navigation;
+			if (oNavigation) {
+				var oParams = {};
+				(oNavigation.keys || []).forEach(function (prop) {
+					oParams[prop.name] = encodeURIComponent(JSON.stringify({
+						value: oEvent.getSource().getBindingContext(oNavigation.model).getProperty(prop.name),
+						type: prop.type
+					}));
+				});
+				if (Object.getOwnPropertyNames(oParams).length !== 0) {
+					this.getOwnerComponent().getRouter().navTo(oNavigation.routeName, oParams);
+				} else {
+					this.getOwnerComponent().getRouter().navTo(oNavigation.routeName);
+				}
 			}
 		}
 	});

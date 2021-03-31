@@ -9,6 +9,7 @@
 	<semantic:SemanticPage
 		id="detailPage"
 		busy="{detailView>/busy}"
+		showFooter="true"
 		busyIndicatorDelay="{detailView>/delay}">
 		<semantic:titleHeading>
 			<Title
@@ -28,7 +29,7 @@
 					<ObjectAttribute title="Ship Via" text="{ShipVia}"/>
 					<ObjectAttribute title="Ship Name" text="{ShipName}"/>
 					<ObjectAttribute title="Ship Address" text="{ShipAddress}"/>
-					<ObjectAttribute title="Ship Postal Code" text="ShipPostalCode"/>
+					<ObjectAttribute title="Ship Postal Code" text="{ShipPostalCode}"/>
 				</layout:VerticalLayout>
 			</layout:HorizontalLayout>
 		</semantic:headerContent>
@@ -37,9 +38,14 @@
 				id="lineItemsList"
 				width="auto"
 				items="{Order_Details}"
+				mode="SingleSelectMaster"
 				updateFinished=".onListUpdateFinished"
 				noDataText="{i18n>detailLineItemTableNoDataText}"
-				busyIndicatorDelay="{detailView>/lineItemTableDelay}">
+				busyIndicatorDelay="{detailView>/lineItemTableDelay}"
+				xmlns:action="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+				action:wiring="\{'selectionChange':\{'navigation':\{'routeName':'Info'\}\}\}"
+				selectionChange="action"
+				>
 				<headerToolbar>
 					<Toolbar>
 						<Title
@@ -88,7 +94,21 @@
 				</items>
 			</Table>
 		</semantic:content>
+		
+		<!--Footer content-->
+		<semantic:positiveAction>
+			<semantic:PositiveAction/>
+		</semantic:positiveAction>
 
+		<semantic:negativeAction>
+			<semantic:NegativeAction/>
+		</semantic:negativeAction>
+
+		<semantic:footerCustomActions>
+			<Button text="Boton"/>
+		</semantic:footerCustomActions>
+
+		<!--Header content-->
 		<semantic:closeAction>
 			<semantic:CloseAction
 					id="closeColumn"

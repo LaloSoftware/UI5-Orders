@@ -102,6 +102,15 @@
 						"master",
 						"object"
 					]
+				},
+				{
+					"pattern": "Info",
+					"name": "Info",
+					"target": [
+						"master",
+						"object",
+						"info"
+					]
 				}
 			],
 
@@ -121,6 +130,11 @@
 					"viewName": "DetailObjectNotFound",
 					"viewId": "detailObjectNotFound",
 					"controlAggregation": "midColumnPages"
+				},
+				"info": {
+					"viewName": "Info",
+					"viewId": "info",
+					"controlAggregation": "endColumnPages"
 				},
 				"notFound": {
 					"viewName": "NotFound",
