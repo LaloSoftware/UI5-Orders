@@ -11,7 +11,7 @@ sap.ui.define([], function () {
 		 */
 		currencyValue : function (sValue) {
 			if (!sValue) {
-				return "0";
+				return "$0.00";
 			}
 			return `$${parseFloat(sValue).toFixed(2)}`;
 		},
